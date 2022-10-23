@@ -6,7 +6,6 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 
 
-
 class ModelTests(TestCase):
     """Test for models User"""
 
@@ -14,7 +13,10 @@ class ModelTests(TestCase):
         """Test create user with email successfull"""
         email = 'testEmail@gmail.com'
         password = 'testPassword'
-        user = get_user_model().objects.create_user(email=email, password=password)
+        user = get_user_model().objects.create_user(
+            email=email,
+            password=password
+            )
 
         self.assertEqual(user.email, email)
         self.assertTrue(user.check_password(password))
@@ -27,6 +29,7 @@ class ModelTests(TestCase):
             ['TEST3@EXAMPLE.com', 'TEST3@example.com'],
             ['test4@example.COM', 'test4@example.com'],
         ]
+
         for email, expected in simple_emails:
             user = get_user_model().objects.create_user(email, '1233simple')
             self.assertEqual(user.email, expected)
@@ -37,10 +40,11 @@ class ModelTests(TestCase):
             get_user_model().objects.create_user('', '123test')
 
     def test_create_superuser(self):
-        """Test create superuser    """
+        """Test create superuser"""
         user = get_user_model().objects.create_superuser(
-            email = 'test@gmail.com',
-            password = 'test123',
+            email='test@gmail.com',
+            password='test123',
         )
+
         self.assertTrue(user.is_superuser)
-        self.assertTrue(user.is_staff )
+        self.assertTrue(user.is_staff)

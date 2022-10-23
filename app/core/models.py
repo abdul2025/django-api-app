@@ -6,12 +6,28 @@ class UserManager(BaseUserManager):
     """Manager for Users"""
     def create_user(self, email, password=None, **extra_fields):
         """Create a new User"""
+        if not email:
+            raise ValueError("Please provide an email address")
+
         user = self.model(email=self.normalize_email(email), **extra_fields)
+
         user.set_password(password)
         user.save(using=self._db)
 
         return user
+    def create_superuser(self, email, password=None, **extra_fields):
+        """Create a super User"""
+        if not email:
+            raise ValueError("Please provide an email address")
 
+        user = self.model(email=self.normalize_email(email), **extra_fields)
+        user.is_superuser = True
+        user.is_staff = True
+        user.set_password(password)
+        user.save(using=self._db)
+
+
+        return user
 
 class User(AbstractBaseUser, PermissionsMixin):
     """User model"""
